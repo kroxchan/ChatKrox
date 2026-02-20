@@ -167,6 +167,14 @@ print(saved)
         stdout = (p.stdout or b"").decode("utf-8", errors="replace")
         saved = stdout.strip().splitlines()[-1].strip()
         if saved:
+            try:
+                subprocess.run(
+                    [sys.executable, str(REPO_ROOT / "scripts" / "memory" / "inbox_index.py"), saved],
+                    check=False,
+                    capture_output=True,
+                )
+            except Exception:
+                pass
             print(saved)
             return 0
 
@@ -182,6 +190,14 @@ print(saved)
         fallback_reason = "DeepReader failed.\n\nSTDOUT:\n" + stdout + "\n\nSTDERR:\n" + stderr
         saved = _fallback_ingest(url, out_dir)
         if saved:
+            try:
+                subprocess.run(
+                    [sys.executable, str(REPO_ROOT / "scripts" / "memory" / "inbox_index.py"), saved],
+                    check=False,
+                    capture_output=True,
+                )
+            except Exception:
+                pass
             print(saved)
             return 0
 
