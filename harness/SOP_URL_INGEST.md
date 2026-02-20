@@ -7,7 +7,8 @@ Goal: when a URL appears (X/Reddit/YouTube/webpage/docs), ingest it into Markdow
 - Preferred first choice: DeepReader (local ingest to Markdown).
 - If DeepReader fails, try OpenClaw-native `web_fetch`.
 - If `web_fetch` fails (blocked/dynamic), try `r.jina.ai` fallback.
-- If still blocked and browser relay tab is attached, use browser relay / desktop control.
+- If still blocked, use the local OpenClaw-managed browser (profile=openclaw) to navigate dynamic pages and extract the target URL/content.
+- If the site requires your logged-in session, THEN use Chrome extension relay (profile=chrome) after you attach a tab.
 - Always report which path succeeded and why a path failed.
 
 ## What counts as success
