@@ -45,6 +45,11 @@ SYSTEM_SUMMARY.md
 # Intel cache (private runtime data)
 data/intel/cache.jsonl
 data/intel/history.json
+data/intel/last_run.txt
+
+# Private workspace components
+DeepEar/
+amap-skill/
 
 # Temporary / scratch
 tmp/
