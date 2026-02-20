@@ -1,0 +1,68 @@
+# OpenClaw workspace hygiene
+
+# Secrets / credentials
+.secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+*.env
+.env.*
+
+# Python virtual envs
+.venv*/
+venv*/
+__pycache__/
+*.pyc
+
+# Node / bun artifacts
+node_modules/
+.bun/
+
+# OpenClaw / agent runtime data
+.openviking_data/
+.clawhub/
+archives/
+news/
+logs/
+
+# Personal memory/journal (keep private)
+memory/
+MEMORY.md
+HEARTBEAT.md
+SOUL.md
+TOOLS.md
+USER.md
+IDENTITY.md
+AGENTS.md
+BOOTSTRAP.md
+SYSTEM_SUMMARY.md
+
+# Temporary / scratch
+tmp/
+*.tmp
+*.log
+*.zip
+*.7z
+*.tar
+*.gz
+
+# Media / screenshots
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Large crawlers / datasets
+crawlee/
+data/
+
+go/
+
+tools/_ocr_last.json
