@@ -32,6 +32,8 @@ logs/
 
 # Personal memory/journal (keep private)
 memory/
+!scripts/memory/
+!scripts/memory/**
 MEMORY.md
 HEARTBEAT.md
 SOUL.md
