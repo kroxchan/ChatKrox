@@ -42,6 +42,10 @@ AGENTS.md
 BOOTSTRAP.md
 SYSTEM_SUMMARY.md
 
+# Intel cache (private runtime data)
+data/intel/cache.jsonl
+data/intel/history.json
+
 # Temporary / scratch
 tmp/
 *.tmp

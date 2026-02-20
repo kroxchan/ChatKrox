@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "updatedAt": "2026-02-20",
+  "topics": [
+    {
+      "id": "ai_agents",
+      "name": "AI Agents",
+      "queries": [
+        "AI agent framework funding launch",
+        "MCP protocol tool calling agent workflow",
+        "OpenClaw ecosystem skill release",
+        "agentic workflow orchestration"
+      ]
+    },
+    {
+      "id": "crypto_finance",
+      "name": "Crypto & Financial Markets",
+      "queries": [
+        "Bitcoin market macro catalyst",
+        "crypto exchange regulation",
+        "US treasury yields inflation data market impact",
+        "stock market volatility earnings guidance"
+      ]
+    },
+    {
+      "id": "geo_politics",
+      "name": "Geopolitics",
+      "queries": [
+        "US China relations policy update",
+        "EU sanctions update",
+        "Middle East ceasefire negotiation",
+        "Taiwan Strait military exercise"
+      ]
+    },
+    {
+      "id": "sports",
+      "name": "Sports (Basketball & Football)",
+      "queries": [
+        "NBA injury report trade rumor",
+        "Premier League title race injury update",
+        "UEFA Champions League key match",
+        "CBA playoff news"
+      ]
+    }
+  ]
+}
