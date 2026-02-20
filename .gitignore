@@ -22,6 +22,10 @@ node_modules/
 # OpenClaw / agent runtime data
 .openviking_data/
 .clawhub/
+
+# Allow skill package metadata (skills/*/.clawhub/origin.json)
+!skills/**/.clawhub/
+!skills/**/.clawhub/origin.json
 archives/
 news/
 logs/
