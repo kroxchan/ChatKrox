@@ -4,25 +4,11 @@ Public repo for independently developed OpenClaw skills (plus the minimal docs n
 
 ## Skills
 
-- `skills/amap/` - AMap (Gaode) Web Service API CLI: geocode/reverse-geocode/IP locate/weather/routes/POI
+- This repo only publishes skills we own (independently developed). Third-party skills are not included.
 
 ## Quick Deploy / Use
 
-Prereqs:
-- Install Bun: https://bun.sh/
-- Set env var `AMAP_MAPS_API_KEY` (do NOT commit it)
-
-Run (examples):
-
-```bash
-cd skills/amap
-bun scripts/amap.ts --help
-bun scripts/amap.ts poi-around --location "121.4737,31.2304" --keywords "餐厅" --radius 1500
-```
-
-More examples:
-- `skills/amap/references/examples.md`
-- `skills/amap/references/command-map.md`
+Pick a skill under `skills/` and follow its `SKILL.md`.
 
 ## What is intentionally NOT included
 
