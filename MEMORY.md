@@ -16,10 +16,10 @@ Everything else belongs in `memory/` (daily logs) or `memory/archive/` (cold mem
 [P0][2026-02-11] Family naming: Call the grandmother "家家".
 
 [P0][2026-02-20] Context persistence: Cron isolated sessions may lose chat context; use file-based anchors via skill `context-anchor` (anchors in `memory/anchors/`) for stable SOP/requirements.
-[P0][2026-02-20] Windows shell: Prefer `cmd /c` for chained commands; PowerShell `&&` may fail in tool exec context.
+[P0][2026-02-20] Windows shell: Prefer `cmd /c` for chained commands; PowerShell `&&` may fail in tool exec context (use `;` if staying in PowerShell).
 
 [P0][2026-02-21] Ops: Windows user-level Path may be corrupted by literal `%PATH%`; stable fix is editing `HKCU\\Environment\\Path` to include `C:\\Users\\Krox\\AppData\\Roaming\\npm` so `openclaw` resolves; follow-up may be needed to restore other tool paths.
-[P0][2026-02-21] XHS: Content calendar writing had encoding/path issues under `.openviking_data/.../51_Content_calendar_*.md`; later a workspace-root `XHS_OPS.md` was created/updated and an entry marked `posted`. Need to choose a single source of truth to avoid drift.
+[P0][2026-02-21] XHS: Content calendar has two competing sources (`.openviking_data/.../51_Content_calendar_*.md` vs workspace `XHS_OPS.md`) due to encoding/path issues; must pick a single source of truth (or define an explicit sync rule) to avoid drift.
 
 [P0][2026-02-22] OpenClaw: Upgraded to `2026.2.19-2` via npm; fixed intermittent `openclaw` not recognized by rewriting user PATH (`HKCU\Environment\Path`) to include `C:\Users\Krox\AppData\Roaming\npm` (corruption by literal `%PATH%`). Follow-up: rebuild remaining PATH entries safely.
 [P0][2026-02-21] Legal-doc workflow: For the Zhuhai档案/社保/欠薪 case, strategy is to anchor on court-verified facts ("原始档案材料不间断出现" + court re-fetching materials neither party had), start with协商型履职申请 (written response + deadline), use国务院客户端欠薪线索 as trackable督办 accelerator, then escalate to 纪委监委/市政府督办/省厅 if拖延/敷衍.
