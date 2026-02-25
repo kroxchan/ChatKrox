@@ -12,8 +12,11 @@ Everything else belongs in `memory/` (daily logs) or `memory/archive/` (cold mem
 [P0][2026-02-11] Model preference: Prefer stable tool-use behavior; keep `rescue` on gpt-5.2 primary with qwen fallback.
 [P0][2026-02-11] Workflow: Before complex tasks, consider using AgenticFlow to design a workflow.
 [P0][2026-02-11] Web access: For web tasks, try `web_fetch` first; if blocked (X/login/dynamic), use connected node desktop control to retrieve info.
-[P0][2026-02-11] Identity before reply: Before replying, confirm who is speaking and reply to that person only; do not mix recipients.
-[P0][2026-02-11] Family naming: Call the grandmother "家家".
+[P0][2026-02-11] Identity before reply: Before replying, confirm who is speaking via inbound `sender_id` and reply only to that person; do not mix recipients.
+[P0][2026-02-25] Verification: When ChenZhengKang messages, always verify facts/state with logs/tools/files before replying; treat it as top operating principle.
+[P0][2026-02-25] Contacts: Use WeCom `sender_id` as the canonical identifier. ChenZhengKang is the primary owner identity; family members are learned and stored as `sender_id -> relation/name`.
+[P0][2026-02-25] Family naming: Call the maternal grandmother "家家" (WuYouPing).
+[P0][2026-02-25] Cron delivery reliability: Prefer `sessionTarget=isolated` + `payload.kind=agentTurn` with explicit `delivery={mode:announce, channel:wecom, to:<sender_id>}`; `main + systemEvent` variants may lose/clear `delivery` and fail to deliver.
 
 [P0][2026-02-20] Context persistence: Cron isolated sessions may lose chat context; use file-based anchors via skill `context-anchor` (anchors in `memory/anchors/`) for stable SOP/requirements.
 [P0][2026-02-20] Windows shell: Prefer `cmd /c` for chained commands; PowerShell `&&` may fail in tool exec context (use `;` if staying in PowerShell).
