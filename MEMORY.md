@@ -43,6 +43,24 @@ Everything else belongs in `memory/` (daily logs) or `memory/archive/` (cold mem
 - If all sources return no results, explicitly tell user "searched X sources, none found relevant" instead of simple "no".
 - Violation = lazy behavior, user will call it out.
 
+# Cron 防回退规则（新增）
+
+[P0][2026-02-28] 晨报/午安/晚安任务必须设置 bestEffort=true，否则投递失败会回落到主人
+[原因] 2026-02-27 发现家人午安投递失败后内容回落到主人会话，导致刷屏
+
+[P0][2026-02-28] 定时任务连续失败 3 次必须自动禁用并通知
+[原因] 避免重复刷屏 + 节省 Token
+
+[P0][2026-02-28] 所有 cron 任务配置变更必须记录到变更日志
+[位置] workspace/cron-changelog.md
+[格式] YYYY-MM-DD: jobId - 变更说明
+
+[P0][2026-02-28] Codex 子代理集成完成
+[架构] 主模型 (Qwen) → sessions_spawn → Codex 子代理
+[触发条件] 代码执行/文件操作/Git 操作/批量任务/CLI 工具使用
+[配置] tools.agentToAgent.enabled = true（已启用跨代理访问）
+[文档] README-CODEX.md / docs/CODEX-INTEGRATION.md / examples/codex-examples.md
+
 ---
 # 增量沉淀记忆（自动追加·来源：周回顾）
 ## 周回顾总结（2026-02-15）
