@@ -61,6 +61,7 @@ sessions_spawn --agentId coder --task "列出当前目录的前 5 个文件"
 | [docs/CODEX-INTEGRATION.md](docs/CODEX-INTEGRATION.md) | 完整部署指南 |
 | [examples/codex-examples.md](examples/codex-examples.md) | 使用示例 |
 | [scripts/setup-codex-integration.ps1](scripts/setup-codex-integration.ps1) | 自动配置脚本 |
+| [skills/README.md](skills/README.md) | 技能集合索引 |
 
 ## 💡 使用场景
 
