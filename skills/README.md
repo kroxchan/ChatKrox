@@ -10,8 +10,12 @@
 |------|------|----------|
 | **anti-lazy** | 防偷懒多源搜索 | [查看](local/anti-lazy/README.md) |
 | **crypto-news** | 加密新闻聚合 | [查看](local/crypto-news/README.md) |
-| **opennews** | 加密新闻搜索 | [查看](local/opennews/README.md) |
-| **opentwitter** | Twitter 数据获取 | [查看](local/opentwitter/README.md) |
+
+### 外部集成 (skills/)
+
+| 技能 | 说明 | 部署文档 |
+|------|------|----------|
+| **agent-reach** | 全网访问（Twitter/YouTube/B 站等） | [查看](agent-reach/README.md) |
 
 ### 公共技能 (skills/public/)
 

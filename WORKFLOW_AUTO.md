@@ -29,6 +29,7 @@
 
 二、必备技能（Skills）集成清单（优先顺序）
 - **Codex 子代理**：当任务涉及代码执行/文件操作/脚本运行时，使用 `sessions_spawn --agentId coder` 调度 Codex 执行。详见 `README-CODEX.md`。
+- **Agent Reach**：当任务需要访问外部平台（Twitter/YouTube/B 站/小红书/Reddit 等）时，使用 Agent Reach。详见 `skills/agent-reach/README.md`。
 - evomap（只读接入）：当问题超出当前理解/缺少标准做法时，必须先查 `tmp/evomap_ro/evomap` 的 README/docs/examples/src，提取推荐输入格式/参数/示例；仍无法解决再向用户发起澄清。
 - weather：用于早安/午安/晚安中的天气（优先 Open-Meteo；失败就降级"天气数据暂不可用"）。
 - technews：用于新闻/晨报类聚合。
@@ -73,6 +74,44 @@
    - Git 操作：提交/推送/查看历史
    - 命令执行：需要 CLI 工具完成的任务
    - 复杂任务：需要多步骤执行的工作
+
+---
+
+**[P0][2026-02-28] Agent Reach 使用流程**
+当任务需要访问外部平台时，**必须**使用 Agent Reach：
+
+1. **触发条件（满足任一即使用）**
+   - **社交媒体**：Twitter/Reddit/小红书内容读取
+   - **视频平台**：YouTube/B 站视频和字幕
+   - **新闻网站**：RSS 订阅源读取
+   - **任意网页**：Jina Reader 语义读取（r.jina.ai）
+
+2. **标准流程**
+   ```powershell
+   # 1. 检查渠道状态
+   agent-reach doctor
+   
+   # 2. 配置缺失渠道
+   agent-reach configure <channel> <credentials>
+   
+   # 3. 执行任务
+   xreach twitter://user/elonmusk
+   ```
+
+3. **可用渠道**
+   - ✅ Twitter/X：读取/搜索推文
+   - ✅ RSS/Atom：读取订阅源
+   - ✅ 任意网页：Jina Reader
+
+4. **配置指南**
+   - **代理**：`agent-reach configure proxy http://user:pass@ip:port`
+   - **Twitter Cookie**：使用 Cookie-Editor 导出 Header String
+   - **小红书**：需要 Docker + xiaohongshu-mcp
+
+5. **禁止行为**
+   - 不得使用主账号 Cookie（用专用账号）
+   - 不得绕过平台速率限制
+   - 不得在未配置代理的情况下访问被封锁平台
 
 2. **标准流程**
    ```json
