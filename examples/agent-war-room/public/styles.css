@@ -1,0 +1,294 @@
+﻿:root {
+  --ink: #1c2424;
+  --ink-soft: #485a5a;
+  --bg: #edf5f4;
+  --panel: #ffffffd9;
+  --line: #cfe3de;
+  --accent: #0b7d73;
+  --accent-2: #c85c2a;
+  --warn: #9b311f;
+  --shadow: 0 16px 42px rgba(6, 37, 34, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Bahnschrift", "Segoe UI Variable", "Trebuchet MS", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 20% -10%, #d6f0eb 0, #edf5f4 45%, #f5f0e6 100%);
+}
+
+.bg-shape {
+  position: fixed;
+  border-radius: 999px;
+  filter: blur(42px);
+  z-index: -1;
+  opacity: 0.55;
+}
+
+.bg-shape-a {
+  width: 320px;
+  height: 320px;
+  top: -90px;
+  right: -80px;
+  background: #5dd7c1;
+}
+
+.bg-shape-b {
+  width: 280px;
+  height: 280px;
+  left: -90px;
+  bottom: -70px;
+  background: #ffab74;
+}
+
+.topbar {
+  margin: 16px;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  letter-spacing: 0.03em;
+  font-size: 1.4rem;
+}
+
+.subtitle {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.status-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(128px, 1fr));
+}
+
+.status-grid div {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  background: #f8fcfb;
+}
+
+.status-grid span {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.status-grid strong {
+  font-size: 0.9rem;
+}
+
+.layout {
+  margin: 0 16px 16px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1.1fr 2fr 1.2fr;
+}
+
+.panel {
+  border: 1px solid #d2e3df;
+  border-radius: 14px;
+  background: var(--panel);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow);
+}
+
+.col {
+  padding: 14px;
+  min-height: 72vh;
+}
+
+.panel-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-sm {
+  gap: 8px;
+}
+
+input,
+textarea,
+select,
+button {
+  width: 100%;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  transition: transform 0.16s ease, opacity 0.16s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+button.ghost {
+  width: auto;
+  background: #edf8f6;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font-weight: 500;
+}
+
+button.warn {
+  background: var(--warn);
+}
+
+.topic-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 58vh;
+  overflow: auto;
+}
+
+.topic-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  background: #f6fcfb;
+  cursor: pointer;
+}
+
+.topic-item.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px #0b7d732e;
+  background: #e9f8f4;
+}
+
+.topic-item small {
+  color: var(--ink-soft);
+}
+
+.message-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 72vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.msg {
+  border: 1px solid #d9e8e4;
+  background: #fefefe;
+  border-left: 4px solid #7ea69f;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.msg.agent {
+  border-left-color: #0b7d73;
+}
+
+.msg.user {
+  border-left-color: #c85c2a;
+}
+
+.msg.system {
+  border-left-color: #607d8b;
+  background: #f6f8fc;
+}
+
+.msg-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.msg-body {
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.control-grid {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.force-box {
+  margin-top: 14px;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panel,
+.msg,
+.topic-item {
+  animation: reveal 0.35s ease;
+}
+
+@media (max-width: 1020px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .col {
+    min-height: auto;
+  }
+
+  .topbar {
+    flex-direction: column;
+  }
+
+  .status-grid {
+    width: 100%;
+  }
+}
