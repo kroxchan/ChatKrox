@@ -66,7 +66,7 @@ const clientsByMeeting = new Map();
 const knownOpenClawAgents = new Set(["main", "rescue", "coder"]);
 const codexDeepJobs = new Set();
 
-const defPolicy = () => ({ maxRounds: 120, timeoutSec: 45, hostPriority: true, autoRoundRobin: true });
+const defPolicy = () => ({ maxRounds: 400, timeoutSec: 45, hostPriority: true, autoRoundRobin: true });
 const nowIso = () => new Date().toISOString();
 const mkId = (p) => `${p}_${Math.random().toString(36).slice(2, 10)}`;
 const tokenEst = (t) => Math.max(1, Math.ceil((t || "").length / 4));
@@ -837,12 +837,8 @@ function isEngineeringTopic(meeting, topic) {
 function shouldUseCodexCliPrimary(meeting, topic, reason) {
   if (CODEX_MODE === "builtin") return false;
   if (CODEX_MODE === "cli") return true;
-  if (CODEX_FULL_RELEASE) {
-    if (reason === "host_interrupt" || reason === "topic_started" || reason === "manual_next" || reason === "force_speaker" || reason === "resume") return true;
-    if (reason === "round-robin") {
-      return CODEX_DEEP_ROUND_ROBIN && (isDebateTopic(meeting, topic) || isOpinionTopic(meeting, topic) || isScenarioTopic(meeting, topic));
-    }
-  }
+  // Full-release mode: prefer real Codex reasoning on all rounds; fallback chain handles failures.
+  if (CODEX_FULL_RELEASE) return true;
   if (CODEX_STRENGTH === "strong" && (isDebateTopic(meeting, topic) || isOpinionTopic(meeting, topic))) return true;
   if (isDebateTopic(meeting, topic)) return true;
   return reason === "host_interrupt" || reason === "manual_next" || reason === "force_speaker";
@@ -1698,17 +1694,14 @@ async function runNextTurn(meetingId, reason = "round-robin") {
   pt(meeting.id, topic);
   pm(meeting);
   if (meeting.runtime.noNewInfoStreak >= NO_NEW_INFO_PAUSE_STREAK) {
-    meeting.runtime.paused = true;
-    meeting.runtime.autoPaused = true;
-    meeting.runtime.pendingTurnReason = null;
-    pm(meeting);
     addEvent(
       meeting,
-      "meeting.paused",
-      { reason: "no_new_info_streak", streak: meeting.runtime.noNewInfoStreak, threshold: NO_NEW_INFO_PAUSE_STREAK },
+      "meeting.notice",
+      { reason: "no_new_info_streak_reset", streak: meeting.runtime.noNewInfoStreak, threshold: NO_NEW_INFO_PAUSE_STREAK },
       topic.id
     );
-    return;
+    meeting.runtime.noNewInfoStreak = 0;
+    pm(meeting);
   }
   if (meeting.runtime.paused) return;
   if (pendingReason) scheduleNextTurn(meeting, pendingReason);
@@ -1760,17 +1753,14 @@ async function forceSpeakerTurn(meeting, topic, speaker) {
   pt(meeting.id, topic);
   pm(meeting);
   if (meeting.runtime.noNewInfoStreak >= NO_NEW_INFO_PAUSE_STREAK) {
-    meeting.runtime.paused = true;
-    meeting.runtime.autoPaused = true;
-    meeting.runtime.pendingTurnReason = null;
-    pm(meeting);
     addEvent(
       meeting,
-      "meeting.paused",
-      { reason: "no_new_info_streak", streak: meeting.runtime.noNewInfoStreak, threshold: NO_NEW_INFO_PAUSE_STREAK },
+      "meeting.notice",
+      { reason: "no_new_info_streak_reset", streak: meeting.runtime.noNewInfoStreak, threshold: NO_NEW_INFO_PAUSE_STREAK },
       topic.id
     );
-    return;
+    meeting.runtime.noNewInfoStreak = 0;
+    pm(meeting);
   }
   if (meeting.runtime.paused) return;
   if (pendingReason) scheduleNextTurn(meeting, pendingReason);
