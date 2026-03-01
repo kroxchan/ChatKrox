@@ -18,6 +18,11 @@
    - 清理后自动开启新会话
    - 保持上下文大小在合理范围
 
+4. **磁盘清理**（新增）
+   - 清理 npm-cache（平均释放 1-2 GB）
+   - 清理 workspace/tmp 目录
+   - 检查磁盘空间（低于 5GB 告警）
+
 ## 安装
 
 ```bash
@@ -36,8 +41,11 @@ python skills/local/context-cleaner/scripts/clean_context.py --dry-run
 # 实际清理
 python skills/local/context-cleaner/scripts/clean_context.py
 
+# 带磁盘清理
+python skills/local/context-cleaner/scripts/clean_context.py --disk-cleanup
+
 # 自定义参数
-python skills/local/context-cleaner/scripts/clean_context.py --sessions-days 7 --memory-days 30 --new-session
+python skills/local/context-cleaner/scripts/clean_context.py --sessions-days 7 --memory-days 30 --new-session --disk-cleanup --disk-threshold-gb 5.0
 ```
 
 ### 定时任务
@@ -64,6 +72,8 @@ python skills/local/context-cleaner/scripts/clean_context.py --sessions-days 7 -
 | `--sessions-days` | 7 | 保留最近 N 天的会话 |
 | `--memory-days` | 30 | 归档超过 N 天的记忆文件 |
 | `--new-session` | True | 清理后开启新会话 |
+| `--disk-cleanup` | False | 清理 npm-cache 和 tmp 目录 |
+| `--disk-threshold-gb` | 5.0 | 磁盘空间告警阈值（GB） |
 
 ## 输出示例
 
@@ -77,6 +87,12 @@ Context cleaner report
 - memoryHighlightsExtracted: 0
 - memoryFilesDeleted: 0
 - newSessionCreated: True
+
+Disk Cleanup
+- spaceFreed: 1.54
+
+Disk Space Check
+- freeSpaceGB: 5.04
 ```
 
 ## 注意事项

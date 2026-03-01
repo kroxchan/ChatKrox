@@ -1,10 +1,10 @@
 {
-  "name": "上下文清理 - 每日",
+  "name": "上下文清理 + 磁盘清理 - 每日",
   "schedule": "0 3 * * *",
   "sessionTarget": "isolated",
   "payload": {
     "kind": "agentTurn",
-    "message": "执行上下文清理：删除超过 7 天的旧会话，归档 30 天前的记忆精华到 MEMORY.md，然后开启新会话"
+    "message": "执行上下文清理和磁盘清理：删除超过 7 天的旧会话，归档 30 天前的记忆精华到 MEMORY.md，清理 npm-cache 和 tmp 目录，检查磁盘空间，然后开启新会话"
   },
   "delivery": {
     "mode": "announce",

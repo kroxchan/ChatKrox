@@ -8,12 +8,18 @@
 - 清理超过 7 天未活跃的旧会话
 - **保留重要会话**：`sessionKey`/会话 key 包含 `important` 或 `memory`
 - 读取 `memory/YYYY-MM-DD.md`（超过 30 天）
-- 提取“精华”追加到 `MEMORY.md`
+- 提取"精华"追加到 `MEMORY.md`
 - 删除已处理的旧记忆文件
+- **磁盘清理**（新增）：
+  - 清理 npm-cache（平均释放 1-2 GB）
+  - 清理 workspace/tmp 目录
+  - 检查磁盘空间（低于 5GB 告警）
 - 输出报告：
   - 删除了多少会话
   - 追加了多少条精华
   - 保留了哪些重要会话
+  - 释放了多少磁盘空间
+  - 当前磁盘剩余空间
 
 ## 使用
 
@@ -28,8 +34,12 @@ python skills/local/context-cleaner/scripts/clean_context.py
 - `--dry-run`：只打印将要执行的动作，不修改任何文件
 - `--sessions-days 7`：会话保留天数（默认 7）
 - `--memory-days 30`：记忆文件归档阈值（默认 30）
+- `--new-session`：清理后开启新会话（默认 True）
+- `--disk-cleanup`：清理 npm-cache 和 tmp 目录
+- `--disk-threshold-gb 5.0`：磁盘空间告警阈值（GB）
 
 ## 注意
 
 - 会话清理通过修改 OpenClaw 的 session store（`openclaw sessions --json` 输出的 `path`）实现。
 - 脚本会在写入前创建备份：`<sessions.json>.<YYYYMMDD-HHMMSS>.bak`。
+- 磁盘清理需要安装 `psutil`：`pip install psutil`

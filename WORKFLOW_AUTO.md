@@ -30,6 +30,7 @@
 二、必备技能（Skills）集成清单（优先顺序）
 - **Codex 子代理**：当任务涉及代码执行/文件操作/脚本运行时，使用 `sessions_spawn --agentId coder` 调度 Codex 执行。详见 `README-CODEX.md`。
 - **Agent Reach**：当任务需要访问外部平台（Twitter/YouTube/B 站/小红书/Reddit 等）时，使用 Agent Reach。详见 `skills/agent-reach/README.md`。
+- **context-cleaner**：内存管控机制，每天凌晨 3 点自动清理旧会话、归档记忆精华、清理磁盘空间。详见 `skills/local/context-cleaner/README.md`。
 - evomap（只读接入）：当问题超出当前理解/缺少标准做法时，必须先查 `tmp/evomap_ro/evomap` 的 README/docs/examples/src，提取推荐输入格式/参数/示例；仍无法解决再向用户发起澄清。
 - weather：用于早安/午安/晚安中的天气（优先 Open-Meteo；失败就降级"天气数据暂不可用"）。
 - technews：用于新闻/晨报类聚合。
@@ -97,6 +98,46 @@
    # 3. 执行任务
    xreach twitter://user/elonmusk
    ```
+
+---
+
+**[P0][2026-03-01] context-cleaner 内存管控机制**
+当磁盘空间低于 5GB 或上下文超过 80% 时，**必须**执行清理：
+
+1. **自动执行**（每天凌晨 3 点）
+   ```json
+   {
+     "name": "上下文清理 + 磁盘清理 - 每日",
+     "schedule": "0 3 * * *",
+     "sessionTarget": "isolated",
+     "payload": {
+       "kind": "agentTurn",
+       "message": "执行上下文清理和磁盘清理"
+     }
+   }
+   ```
+
+2. **手动执行**
+   ```bash
+   # 完整清理（推荐）
+   python skills/local/context-cleaner/scripts/clean_context.py --disk-cleanup
+   
+   # 预览模式
+   python skills/local/context-cleaner/scripts/clean_context.py --dry-run --disk-cleanup
+   ```
+
+3. **清理内容**
+   - 删除超过 7 天的旧会话
+   - 归档 30 天前的记忆精华到 MEMORY.md
+   - 清理 npm-cache（平均释放 1-2 GB）
+   - 清理 workspace/tmp 目录
+   - 检查磁盘空间（低于 5GB 告警）
+   - 开启新会话
+
+4. **监控指标**
+   - 上下文大小：保持 <80%
+   - 磁盘空间：保持 >5GB
+   - npm-cache：每周清理一次
 
 3. **可用渠道**
    - ✅ Twitter/X：读取/搜索推文

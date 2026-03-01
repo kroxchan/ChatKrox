@@ -21,6 +21,7 @@ import re
 import shutil
 import subprocess
 import sys
+import psutil
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
@@ -97,6 +98,62 @@ def _iter_sessions_from_store(store: Dict[str, Any]) -> Iterable[SessionRow]:
 def _should_keep_session(key: str) -> bool:
     lk = key.lower()
     return ("important" in lk) or ("memory" in lk)
+
+
+def _get_free_disk_space_gb() -> float:
+    """Get free disk space in GB."""
+    try:
+        usage = psutil.disk_usage("C:")
+        return usage.free / (1024 ** 3)
+    except Exception:
+        return 0.0
+
+
+def _cleanup_disk(*, dry_run: bool) -> float:
+    """Clean npm-cache and tmp directories. Return freed space in GB."""
+    freed_bytes = 0
+
+    # npm-cache
+    npm_cache = Path.home() / "AppData" / "Local" / "npm-cache"
+    if npm_cache.exists():
+        for item in npm_cache.rglob("*"):
+            if item.is_file():
+                try:
+                    size = item.stat().st_size
+                    freed_bytes += size
+                    if not dry_run:
+                        item.unlink()
+                except Exception:
+                    pass
+        if not dry_run:
+            try:
+                shutil.rmtree(npm_cache, ignore_errors=True)
+            except Exception:
+                pass
+
+    # workspace tmp
+    repo_root = Path(__file__).resolve().parents[4]
+    workspace_tmp = repo_root / "tmp"
+    if workspace_tmp.exists():
+        for item in workspace_tmp.rglob("*.py"):
+            try:
+                size = item.stat().st_size
+                freed_bytes += size
+                if not dry_run:
+                    item.unlink()
+            except Exception:
+                pass
+        for item in workspace_tmp.rglob("*.json"):
+            if item.name not in ["mcporter.json"]:  # Keep important configs
+                try:
+                    size = item.stat().st_size
+                    freed_bytes += size
+                    if not dry_run:
+                        item.unlink()
+                except Exception:
+                    pass
+
+    return freed_bytes / (1024 ** 3)
 
 
 def prune_sessions(*, keep_days: int, dry_run: bool) -> Tuple[int, List[str], Optional[Path]]:
@@ -290,6 +347,8 @@ def main(argv: List[str]) -> int:
     ap.add_argument("--sessions-days", type=int, default=7)
     ap.add_argument("--memory-days", type=int, default=30)
     ap.add_argument("--new-session", action="store_true", default=True, help="Create new session after cleanup (default: True)")
+    ap.add_argument("--disk-cleanup", action="store_true", help="Clean npm-cache and tmp directories")
+    ap.add_argument("--disk-threshold-gb", type=float, default=5.0, help="Alert if free disk space below this threshold (default: 5.0 GB)")
     args = ap.parse_args(argv)
 
     report_lines: List[str] = []
@@ -340,6 +399,21 @@ def main(argv: List[str]) -> int:
                 report_lines.append(f"- newSessionCreated: False (error: {e})")
         else:
             report_lines.append("- newSessionCreated: False (openclaw CLI not found)")
+
+    # Disk cleanup if requested
+    if args.disk_cleanup:
+        report_lines.append("")
+        report_lines.append("Disk Cleanup")
+        freed_space = _cleanup_disk(dry_run=args.dry_run)
+        report_lines.append(f"- spaceFreed: {freed_space}")
+
+    # Check disk space
+    free_gb = _get_free_disk_space_gb()
+    report_lines.append("")
+    report_lines.append("Disk Space Check")
+    report_lines.append(f"- freeSpaceGB: {free_gb:.2f}")
+    if free_gb < args.disk_threshold_gb:
+        report_lines.append(f"- alert: Free space below threshold ({args.disk_threshold_gb} GB)")
 
     sys.stdout.write("\n".join(report_lines) + "\n")
     return 0
