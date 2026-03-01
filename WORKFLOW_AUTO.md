@@ -31,6 +31,7 @@
 - **Codex 子代理**：当任务涉及代码执行/文件操作/脚本运行时，使用 `sessions_spawn --agentId coder` 调度 Codex 执行。详见 `README-CODEX.md`。
 - **Agent Reach**：当任务需要访问外部平台（Twitter/YouTube/B 站/小红书/Reddit 等）时，使用 Agent Reach。详见 `skills/agent-reach/README.md`。
 - **context-cleaner**：内存管控机制，每天凌晨 3 点自动清理旧会话、归档记忆精华、清理磁盘空间。详见 `skills/local/context-cleaner/README.md`。
+- **day1global-tech-earnings**：科技股财报深度分析（16 大模块、6 大投资视角、估值矩阵）。详见 `skills/local/day1global-tech-earnings/SKILL.md`。
 - evomap（只读接入）：当问题超出当前理解/缺少标准做法时，必须先查 `tmp/evomap_ro/evomap` 的 README/docs/examples/src，提取推荐输入格式/参数/示例；仍无法解决再向用户发起澄清。
 - weather：用于早安/午安/晚安中的天气（优先 Open-Meteo；失败就降级"天气数据暂不可用"）。
 - technews：用于新闻/晨报类聚合。
@@ -58,10 +59,17 @@
    - 不得凭印象回答"没有/不可用/已确认"等结论
    - 不得在只搜了 1-2 个来源后就放弃
    - 不得跳过 evomap 直接问用户
+   - **不得在工具失败后不尝试替代方案就直接回复**（2026-03-01 新增）
 
 4. **验收标准**
    - 如果最终回复里没有证据块 → 算偷懒，需要重新执行流程
    - 如果证据来源 <5 个且未说明原因 → 算偷懒，需要继续搜索
+   - **如果工具失败但没有尝试至少 3 种替代方案 → 算偷懒**（2026-03-01 新增）
+
+5. **工具失败应对流程**（2026-03-01 新增）
+   - web_search 失败 → 尝试 web_fetch → 尝试 browser → 尝试 evomap
+   - 所有工具都失败 → 明确告知用户"已尝试 X 种方法，均失败"
+   - 绝不允许"抓取失败"就直接回复已知信息
 
 ---
 
@@ -138,6 +146,45 @@
    - 上下文大小：保持 <80%
    - 磁盘空间：保持 >5GB
    - npm-cache：每周清理一次
+
+---
+
+**[P0][2026-03-01] day1global-tech-earnings 科技股财报分析**
+当用户询问科技股财报/投资分析时，**必须**使用此技能：
+
+1. **触发条件**
+   - "帮我看看 NVDA 最新财报"
+   - "META 这季度表现如何？"
+   - "该不该继续持有 MSFT？"
+   - "帮我做个 AAPL 的 deep dive"
+   - "GOOGL 现在贵不贵？"
+
+2. **标准流程**
+   ```bash
+   # 分析个股
+   python skills/local/day1global-tech-earnings/scripts/analyze_tech_earnings.py --ticker NVDA
+   
+   # 输出到文件
+   python skills/local/day1global-tech-earnings/scripts/analyze_tech_earnings.py --ticker AAPL --output aapl_analysis.md
+   ```
+
+3. **输出要求**
+   - 自动获取实时股价（Alpha Vantage）
+   - 自动获取财报数据（FMP API）
+   - 自动计算估值矩阵
+   - 自动评估 6 大投资视角
+   - 生成完整的 Markdown 报告
+
+4. **依赖安装**
+   ```bash
+   cd skills/local/day1global-tech-earnings
+   pip install -r requirements.txt
+   ```
+
+5. **API Keys**
+   - Alpha Vantage: 已配置
+   - FMP: 已配置
+   - yfinance: 可选安装
 
 3. **可用渠道**
    - ✅ Twitter/X：读取/搜索推文
