@@ -2,3 +2,5 @@ node_modules/
 .env
 *.log
 D:/*.sqlite
+public/uploads/*
+!public/uploads/.gitkeep

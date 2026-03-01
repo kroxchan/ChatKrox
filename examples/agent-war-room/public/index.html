@@ -14,12 +14,14 @@
       <div>
         <h1>Agent Meeting Room</h1>
         <p class="subtitle">OpenClaw / Codex 可视化讨论台</p>
+        <button id="newMeetingBtn" class="ghost top-action" type="button">新建会话</button>
       </div>
       <div class="status-grid">
         <div><span>会议</span><strong id="meetingTitle">-</strong></div>
         <div><span>当前话题</span><strong id="currentTopic">-</strong></div>
         <div><span>消息数</span><strong id="messageCount">0</strong></div>
         <div><span>Token估算</span><strong id="tokenCount">0</strong></div>
+        <div><span>连接状态</span><strong id="wsStatus">连接中...</strong></div>
       </div>
     </header>
 
@@ -43,6 +45,10 @@
           <button id="refreshBtn" class="ghost">刷新</button>
         </div>
         <div id="messageStream" class="message-stream"></div>
+        <div class="panel-title split-title">
+          <h2>系统事件</h2>
+        </div>
+        <div id="eventStream" class="event-stream"></div>
       </section>
 
       <aside class="panel col control">
@@ -52,6 +58,11 @@
 
         <form id="messageForm" class="stack gap-sm">
           <textarea id="messageInput" rows="4" placeholder="输入你的主持发言或指令..."></textarea>
+          <div class="upload-box">
+            <input id="fileInput" type="file" />
+            <input id="fileCaption" type="text" placeholder="文件说明（可选）" />
+            <button id="uploadBtn" class="ghost" type="button">发送图片/文件</button>
+          </div>
           <button type="submit">发送发言</button>
         </form>
 
@@ -60,6 +71,7 @@
           <button id="resumeBtn">继续</button>
           <button id="nextTurnBtn">下一轮</button>
           <button id="endTopicBtn" class="warn">结束话题</button>
+          <button id="startTopicBtn">开始选中话题</button>
         </div>
 
         <div class="stack gap-sm force-box">
